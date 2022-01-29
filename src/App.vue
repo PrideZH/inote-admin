@@ -18,4 +18,8 @@ body {
   margin: 0;
   box-sizing: border-box;
 }
+
+body, #app {
+  height: 100vh;
+}
 </style>

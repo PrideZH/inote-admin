@@ -2,12 +2,15 @@
 import Header from './components/Header.vue';
 import { computed } from 'vue';
 import { useAppStore } from '@/store';
-import { Management, Menu, Odometer, Setting } from '@element-plus/icons-vue';
+import { RouteRecordNormalized, useRouter } from 'vue-router';
+
+const router = useRouter();
+const rootRoute: RouteRecordNormalized = router.getRoutes().find((el) => el.name === 'root') as RouteRecordNormalized;
 
 const appStore = useAppStore();
 const isCollapse = computed(() => appStore.isCollapse);
 const menuWidth = computed(() => {
-  return appStore.isCollapse ? 60 : 200;
+  return appStore.isCollapse ? 64 : 200;
 });
 </script>
 
@@ -26,38 +29,16 @@ const menuWidth = computed(() => {
         :router="true"
         :collapse-transition="false"
       >
-        <el-sub-menu index="dashboard">
+        <el-sub-menu v-for="subMenu in rootRoute.children" :key="subMenu.path" :index="`/${subMenu.path}`">
           <template #title>
-            <el-icon><Odometer /></el-icon>
-            <span>Dashboard</span>
+            <el-icon><svg viewBox="0 0 1024 1024" >
+              <path v-for="(iconSvg, index) in subMenu.meta?.icon" :key="index" fill="currentColor" :d="iconSvg"></path>
+            </svg></el-icon>
+            <span>{{ subMenu.meta?.locale }}</span>
           </template>
-          <el-menu-item index="/workbench">工作台</el-menu-item>
-          <el-menu-item index="/analysis">数据分析</el-menu-item>
-        </el-sub-menu>
-        <el-sub-menu index="permission">
-          <template #title>
-            <el-icon><Management /></el-icon>
-            <span>权限管理</span>
-          </template>
-          <el-menu-item index="/admin">管理员管理</el-menu-item>
-          <el-menu-item index="/role">角色管理</el-menu-item>
-          <el-menu-item index="/permission">权限管理</el-menu-item>
-        </el-sub-menu>
-        <el-sub-menu index="manage">
-          <template #title>
-            <el-icon><Menu /></el-icon>
-            <span>模块管理</span>
-          </template>
-          <el-menu-item index="/category">标签管理</el-menu-item>
-          <el-menu-item index="/good">笔记管理</el-menu-item>
-          <el-menu-item index="/guest">用户管理</el-menu-item>
-        </el-sub-menu>
-        <el-sub-menu index="system">
-          <template #title>
-            <el-icon><Setting /></el-icon>
-            <span>系统设置</span>
-          </template>
-          <el-menu-item index="/account">修改密码</el-menu-item>
+          <el-menu-item v-for="menuItem in subMenu.children" :key="menuItem.path" :index="`/${subMenu.path}/${menuItem.path}`">
+            {{ menuItem.meta?.locale }}
+          </el-menu-item>
         </el-sub-menu>
       </el-menu>
     </el-aside>

@@ -3,10 +3,13 @@ import ElementPlus from 'element-plus';
 import router from './router/index';
 import store from './store';
 import { createApp } from 'vue';
+import '@/api/interceptor';
+
+import 'element-plus/theme-chalk/el-message.css';
 
 const app = createApp(App);
 
-app.use(ElementPlus, { size: 'small' });
+app.use(ElementPlus);
 app.use(router);
 app.use(store);
 
