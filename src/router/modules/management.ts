@@ -18,6 +18,30 @@ export default {
       meta: {
         locale: '用户管理' // menu.management.user
       }
+    },
+    {
+      path: 'note',
+      name: 'note',
+      component: () => import('@/views/management/note/index.vue'),
+      meta: {
+        locale: '笔记管理' // menu.management.note
+      }
+    },
+    {
+      path: 'comment',
+      name: 'comment',
+      component: () => import('@/views/management/comment/index.vue'),
+      meta: {
+        locale: '评论管理' // menu.management.comment
+      }
+    },
+    {
+      path: 'tag',
+      name: 'tag',
+      component: () => import('@/views/management/tag/index.vue'),
+      meta: {
+        locale: '标签管理' // menu.management.tag
+      }
     }
   ],
 };
