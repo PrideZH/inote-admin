@@ -49,7 +49,7 @@ const onSubmit = (): void => {
       isLoading.value = true;
       login(form).then(res => {
         ElMessage.success('登录成功');
-        setToken(res.data.token);
+        setToken({ token: res.data.token, timeout: new Date().getTime() + res.data.timeout * 1000 });
         router.push('/dashboard/workbench');
         isLoading.value = false;
       }).catch(err => {

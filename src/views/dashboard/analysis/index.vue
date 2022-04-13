@@ -13,7 +13,7 @@ onMounted(() => {
 
     const chart = echarts.init(document.getElementById('zoom') as HTMLElement);
 
-    const date: string[] = [];
+    let date: string[] = [];
 
     const newUsersData: number[] = [];
     for (let key in analysis.value?.newUsers) {

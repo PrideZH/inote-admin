@@ -1,8 +1,10 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { clearToken, getToken } from '@/utils/auth';
+import { clearToken, getToken, Token } from '@/utils/auth';
 import { ElMessage } from 'element-plus';
-import { logout } from './admin';
+import { logout, refreshToken } from './admin';
 import router from '@/router';
+
+export const TIMEOUT: number = 30 * 1000;
 
 export interface HttpResponse<T = unknown> {
   code: number;
@@ -10,11 +12,19 @@ export interface HttpResponse<T = unknown> {
   message: string;
 }
 
+axios.defaults.baseURL = import.meta.env.VITE_APP_BASE_URL as string;
+axios.defaults.timeout = TIMEOUT;
+
 axios.interceptors.request.use(
   (config: AxiosRequestConfig) => {
+    const token: Token | null = getToken();
     if (config.headers) {
-      const token: string | null = getToken();
-      if (token) config.headers['token'] = token;
+      if (token) config.headers['token'] = token.token;
+    }
+    // 刷新 token
+    const nowTime: number = new Date().getTime();
+    if (token && token.timeout < nowTime && token.timeout > nowTime - 60 * 60 * 12) {
+      refreshToken();
     }
     return config;
   },
@@ -39,6 +49,7 @@ axios.interceptors.response.use(
     return res;
   },
   (error) => {
+    console.log(error)
     ElMessage.error(error.msg);
     return Promise.reject(error);
   }

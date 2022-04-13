@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { getAdminInfo } from '@/api/admin';
+import { getAdminInfo, logout as logoutAdmin } from '@/api/admin';
 import IconBtn from '@/components/IconBtn.vue';
+import router from '@/router';
 import { useAppStore } from '@/store';
 import { AdminInfo } from '@/types/admin';
 import { Expand, Fold, Location, SwitchButton } from '@element-plus/icons-vue';
@@ -25,7 +26,10 @@ onMounted(() => {
 });
 
 const logout = () => {
-  localStorage.removeItem('token')
+  logoutAdmin().then(res => {
+    localStorage.removeItem('token');
+    router.push('/login');
+  })
 }
 </script>
 

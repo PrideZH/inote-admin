@@ -6,6 +6,7 @@ import { createApp } from 'vue';
 import '@/api/interceptor';
 
 import 'element-plus/theme-chalk/el-message.css';
+import 'element-plus/theme-chalk/el-form.css';
 
 const app = createApp(App);
 

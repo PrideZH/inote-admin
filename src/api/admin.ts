@@ -1,7 +1,11 @@
 import axios from 'axios';
 import { Admin, AdminInfo } from '@/types/admin';
-import { Token } from '@/types/global';
 import { Page } from '@/types/global';
+
+export interface TokenVO {
+  token: string;
+  timeout: number;
+}
 
 export interface LoginData {
   username: string,
@@ -9,11 +13,15 @@ export interface LoginData {
 }
 
 export function login(data: LoginData) {
-  return axios.post<Token>('/api/admin/login', data);
+  return axios.post<TokenVO>('/api/admin/login', data);
+}
+
+export function refreshToken() {
+  return axios.post('/api/admin/refreshToken');
 }
 
 export function logout() {
-  return axios.post<Token>('/api/admin/logout');
+  return axios.post<TokenVO>('/api/admin/logout');
 }
 
 export function getAdminInfo() {
